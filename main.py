@@ -1,12 +1,15 @@
 import pygame
 from constants import *
+from player import Player
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
     dt = 0
-        
+    screen_middle = [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2]
+    # spawn player in the middle of the screen
+    player= Player(screen_middle[0], screen_middle[1], PLAYER_RADIUS)
     
     while True:
         # Handle events
@@ -16,6 +19,7 @@ def main():
                 exit()
                 
         screen.fill("black")
+        player.draw(screen)
         
         pygame.display.flip()
         
