@@ -6,12 +6,15 @@ def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     clock = pygame.time.Clock()
-    dt = 0
+    # dt = 0
     screen_middle = [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2]
     # spawn player in the middle of the screen
     player= Player(screen_middle[0], screen_middle[1], PLAYER_RADIUS)
     
     while True:
+        # calculate dt
+        dt = clock.tick(60) / 1000.0
+        
         # Handle events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
