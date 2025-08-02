@@ -1,0 +1,1 @@
+Using VcXsrv in order to run graphical applications from WSL in my Windows system.
