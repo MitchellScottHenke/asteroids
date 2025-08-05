@@ -1,6 +1,8 @@
 import pygame
 from constants import *
 from player import Player
+from asteroid import Asteroid
+from asteroidfield import AsteroidField
 
 def main():
     pygame.init()
@@ -8,8 +10,20 @@ def main():
     clock = pygame.time.Clock()
     # dt = 0
     screen_middle = [SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2]
-    # spawn player in the middle of the screen
+    
+    # Creating my groups
+    updatable_group = pygame.sprite.Group()
+    drawable_group = pygame.sprite.Group()
+    asteroid_group = pygame.sprite.Group()
+    
+    # spawn player in the middle of the screen, add to groups
     player= Player(screen_middle[0], screen_middle[1], PLAYER_RADIUS)
+    Player.containers = (updatable_group, drawable_group)
+    
+    # Initializing the asteroidfield and asteroids
+    Asteroid.containers = (asteroid_group, updatable_group, drawable_group)
+    AsteroidField.containers = (updatable_group)
+    asteroidfield = AsteroidField()
     
     while True:
         # calculate dt
@@ -22,17 +36,14 @@ def main():
                 exit()
                 
         screen.fill("black")
-        player.draw(screen)
-        player.update(dt)
+        updatable_group.update(dt)
+        
+        for sprite in drawable_group:
+            sprite.draw(screen)
         
         pygame.display.flip()
         
         clock.tick(60)
-        
-    
-    print("Starting Asteroids!")
-    print(f"Screen width: {SCREEN_WIDTH}")
-    print(f"Screen height: {SCREEN_HEIGHT}")
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ class Player(CircleShape):
         c = self.position - forward * self.radius + right
         return [a, b, c]
     
-    def draw(self, screen,):
+    def draw(self, screen):
         pygame.draw.polygon(screen, "white", self.triangle(), 2)
         
     def rotate(self, dt):
