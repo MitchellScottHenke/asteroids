@@ -17,9 +17,9 @@ def main():
     asteroid_group = pygame.sprite.Group()
     
     # spawn player in the middle of the screen, add to groups
-    player= Player(screen_middle[0], screen_middle[1], PLAYER_RADIUS)
     Player.containers = (updatable_group, drawable_group)
-    
+    player= Player(screen_middle[0], screen_middle[1], PLAYER_RADIUS)
+   
     # Initializing the asteroidfield and asteroids
     Asteroid.containers = (asteroid_group, updatable_group, drawable_group)
     AsteroidField.containers = (updatable_group)
@@ -37,6 +37,11 @@ def main():
                 
         screen.fill("black")
         updatable_group.update(dt)
+        for asteroid in asteroid_group:
+            if player.collision(asteroid) == True:
+                print("Game over!")
+                pygame.quit()
+                exit()
         
         for sprite in drawable_group:
             sprite.draw(screen)
