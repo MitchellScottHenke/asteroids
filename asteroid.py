@@ -2,7 +2,6 @@ import pygame
 from circleshape import CircleShape
 from constants import *
 import random
-from asteroidfield import AsteroidField
 
 class Asteroid(CircleShape):
     def __init__(self, x, y, radius):
@@ -16,11 +15,15 @@ class Asteroid(CircleShape):
         
     def split(self):
         self.kill()
-        if self.radius >= ASTEROID_MIN_RADIUS:
-            return
+        if self.radius <= ASTEROID_MIN_RADIUS:
+            return []
+        
         new_angles = random.uniform(20, 50)
-        dir1 = self.velocity.rotate(new_angles)
-        dir2 = self.velocity.rotate(-new_angles)
+        dir1 = self.velocity.rotate(new_angles) * 1.2
+        dir2 = self.velocity.rotate(-new_angles) * 1.2
         new_radius = self.radius - ASTEROID_MIN_RADIUS
-        asteroid1 = AsteroidField.spawn(self.position.x, self.position.y, new_radius, dir1 * 1.2)
-        asteroid2 = AsteroidField.spawn(self.position.x, self.position.y, new_radius, dir2 * 1.2)
+        
+        return [
+            (self.position.x, self.position.y, new_radius, dir1),
+            (self.position.x, self.position.y, new_radius, dir2)
+        ]

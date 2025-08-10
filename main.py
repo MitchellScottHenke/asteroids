@@ -47,8 +47,12 @@ def main():
             
             for shot in shots_group:
                 if shot.collision(asteroid) == True:
-                    asteroid.split()
+                    new_asteroids = asteroid.split()
                     shot.kill()
+                    
+                    for x, y, radius, velocity in new_asteroids:
+                        new_asteroid = Asteroid(x, y, radius)
+                        new_asteroid.velocity = velocity
         
         for sprite in drawable_group:
             sprite.draw(screen)
