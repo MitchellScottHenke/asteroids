@@ -1,11 +1,12 @@
 import pygame
 from circleshape import CircleShape
-from constants import PLAYER_TURN_SPEED, PLAYER_SPEED, SHOT_RADIUS, PLAYER_SHOOT_SPEED
+from constants import PLAYER_TURN_SPEED, PLAYER_SPEED, SHOT_RADIUS, PLAYER_SHOOT_SPEED, PLAYER_SHOOT_COOLDOWN
 
 class Player(CircleShape):
     def __init__(self, x, y, r):
         super().__init__(x, y, r)
         self.rotation = 0
+        self.countdown = 0
         
     # in the player class
     def triangle(self):
@@ -24,6 +25,8 @@ class Player(CircleShape):
         
     def update(self, dt):
         keys = pygame.key.get_pressed()
+        if self.countdown > 0:
+            self.countdown -= dt
 
         if keys[pygame.K_a]:
             # If the a key is pressed, I want the player to rotate to the left
@@ -42,10 +45,17 @@ class Player(CircleShape):
         self.position += forward * PLAYER_SPEED * dt
         
     def shoot(self):
-        shot = Shot(self.position.x, self.position.y, SHOT_RADIUS, self.rotation, PLAYER_SHOOT_SPEED)
+        if self.countdown <= 0:
+            shot = Shot(self.position.x, self.position.y, SHOT_RADIUS, self.rotation, PLAYER_SHOOT_SPEED)
+            self.countdown += PLAYER_SHOOT_COOLDOWN
         
 class Shot(CircleShape):
     def __init__(self, x, y, r, theta, v):
             super().__init__(x, y, r)
-            self.rotation = theta
-            self.velocity = pygame.Vector2(0, 1) * v
+            self.velocity = pygame.Vector2(0, 1).rotate(theta) * v
+            
+    def draw(self, screen):
+        pygame.draw.circle(screen, "white", self.position, self.radius)
+        
+    def update(self, dt):
+        self.position += self.velocity * dt
